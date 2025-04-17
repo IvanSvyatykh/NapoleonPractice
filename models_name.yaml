@@ -1,0 +1,67 @@
+ocr_models :
+  paddleOCR:
+      pp_ocr_v4_cuda:
+        path_to_model_dir: "/home/ivan/.paddleocr/whl/rec/en/en_PP-OCRv4_rec_infer"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/pp_ocr_v4"
+        device: "cuda"
+      pp_ocr_v4_cpu:
+        path_to_model_dir: "/home/ivan/.paddleocr/whl/rec/en/en_PP-OCRv4_rec_infer"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/pp_ocr_v4"
+        device: "cpu"
+  easy_ocrs:
+      cyrillic_g2_cuda:
+        path_to_model_dir : "./models/models_checkpoints/EasyOCR-1.7.2"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/EasyOCR-1.7.2"
+        device: "cuda"  
+      cyrillic_g2_cpu:
+        path_to_model_dir : "./models/models_checkpoints/EasyOCR-1.7.2"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/EasyOCR-1.7.2"
+        device: "cpu"  
+  donut_models:
+      donut-base-finetuned-docvqa__cuda:
+        path_to_model_dir : "./models/models_checkpoints/donut-base-finetuned-docvqa/model_default"
+        path_to_processor_dir : "./models/models_checkpoints/donut-base-finetuned-docvqa/processor_default"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/donut-base-finetuned-docvqa"
+        device: "cuda"
+      donut-base-finetuned-docvqa_cpu:
+        path_to_model_dir : "./models/models_checkpoints/donut-base-finetuned-docvqa/model_default"
+        path_to_processor_dir : "./models/models_checkpoints/donut-base-finetuned-docvqa/processor_default"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/donut-base-finetuned-docvqa"
+        device: "cpu"
+  trocr_models:
+      microsoft/trocr-large-printed_cuda : 
+        path_to_model_dir : "./models/models_checkpoints/microsofttrocr-large-printed/model_default"
+        path_to_processor_dir : "./models/models_checkpoints/microsofttrocr-large-printed/processor_default"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/microsofttrocr-large-printed"
+        device: "cuda"
+      harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character_cuda:
+        path_to_model_dir : "./models/models_checkpoints/harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character/model_default"
+        path_to_processor_dir : "./models/models_checkpoints/harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character/processor_default"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character"
+        device: "cuda"
+        microsoft/trocr-large-printed_cpu: 
+        path_to_model_dir : "./models/models_checkpoints/microsofttrocr-large-printed/model_default"
+        path_to_processor_dir : "./models/models_checkpoints/microsofttrocr-large-printed/processor_default"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/microsofttrocr-large-printed"
+        device: "cpu"
+      harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character_cpu:
+        path_to_model_dir : "./models/models_checkpoints/harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character/model_default"
+        path_to_processor_dir : "./models/models_checkpoints/harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character/processor_default"
+        test_data_txt: "./data/dataset_val_100smpl/annotations.txt"
+        results_dir: "./results/harisali9211trocr-large-printed-e13b_tesseract_MICR_ocr_with_character"
+        device: "cpu"
+  
+
+
+
+  
+  

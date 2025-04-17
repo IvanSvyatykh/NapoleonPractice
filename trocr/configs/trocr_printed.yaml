@@ -1,0 +1,12 @@
+path_to_model_dir : "./trocr/models/microsofttrocr-large-printed/model_default"
+path_to_processor_dir : "./trocr/models/microsofttrocr-large-printed/processor_default"
+path_to_test_dataset : "./data/test"
+path_to_train_dataset : "./data/train"
+path_to_val_dataset : "./data/val"
+metadata_file_name : "annotations.txt"
+output_dir: "./results/microsofttrocr-large-printed"
+device: "cpu"
+optimizer: "AdamW"
+optimizer_step : 5e-5
+epoch : 10
+batch_size : 2

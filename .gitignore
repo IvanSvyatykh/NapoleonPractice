@@ -1,0 +1,11 @@
+data/
+results/
+models/
+.venv
+*.ovpn
+*.conf
+*.pyc
+*.json
+*.model
+*.pth
+
