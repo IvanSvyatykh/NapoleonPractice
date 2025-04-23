@@ -37,7 +37,7 @@ def count_parameters(model: Model) -> int:
     return total_params
 
 
-def train(opt: AttrDict,task:Task ,  show_number: int = 2, amp: bool = False) -> None:
+def train(opt: AttrDict, task: Task, show_number: int = 2, amp: bool = False) -> None:
     """dataset preparation"""
     if not opt.data_filtering_off:
         print(
@@ -309,9 +309,13 @@ def train(opt: AttrDict,task:Task ,  show_number: int = 2, amp: bool = False) ->
                 train_loss = loss_avg.val()
                 loss_log = f"[{i}/{opt.num_iter}] Train loss: {train_loss:0.5f}, Valid loss: {valid_loss:0.5f}, Elapsed_time: {elapsed_time:0.5f}"
                 loss_avg.reset()
-                
-                task.get_logger().report_scalar("Train loss", "iteration", train_loss, iteration=i)
-                task.get_logger().report_scalar("Val loss", "iteration", valid_loss, iteration=i)
+
+                task.get_logger().report_scalar(
+                    "Train loss", "iteration", train_loss, iteration=i
+                )
+                task.get_logger().report_scalar(
+                    "Val loss", "iteration", valid_loss, iteration=i
+                )
                 current_model_log = f"{'Current_accuracy':17s}: {current_accuracy:0.3f}, {'Current_norm_ED':17s}: {current_norm_ED:0.4f}"
 
                 # keep best accuracy model (on valid dataset)
@@ -328,7 +332,9 @@ def train(opt: AttrDict,task:Task ,  show_number: int = 2, amp: bool = False) ->
                         f"./saved_models/{opt.experiment_name}/best_norm_ED.pth",
                     )
                 best_model_log = f"{'Best_accuracy':17s}: {best_accuracy:0.3f}, {'Best_norm_ED':17s}: {best_norm_ED:0.4f}"
-                task.get_logger().report_scalar("Val accuracy", "iterations", best_accuracy, iteration=i)
+                task.get_logger().report_scalar(
+                    "Val accuracy", "iterations", best_accuracy, iteration=i
+                )
                 loss_model_log = f"{loss_log}\n{current_model_log}\n{best_model_log}"
                 print(loss_model_log)
                 log.write(loss_model_log + "\n")
@@ -401,7 +407,7 @@ def main(path_to_conf: Path) -> None:
     add_csv_to_img_dir(Path(config.train_data), config.train_metadata_file_name)
     add_csv_to_img_dir(Path(config.valid_data), config.val_metadata_file_name)
     print(f"Start train on {device}")
-    train(opt=config,task=task)
+    train(opt=config, task=task)
 
 
 if __name__ == "__main__":

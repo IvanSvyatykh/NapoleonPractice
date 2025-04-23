@@ -52,7 +52,6 @@ def validation(model: Model, criterion, evaluation_loader, converter, opt, devic
                 
             elif opt.decode == "beamsearch":
                 preds_str = converter.decode_beamsearch(preds, beamWidth=2)
-            print(preds_str,labels)
 
         else:
             preds = model(image, text_for_pred, is_train=False)

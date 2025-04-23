@@ -9,10 +9,10 @@ train_metadata_file_name : "annotations_train_limited_50.txt"
 val_metadata_file_name : "annotations_val.txt"
 manualSeed: 1111
 workers: 6
-batch_size: 64
+batch_size: 128
 num_iter: 8000
 valInterval: 200
-saved_model: '../saved_models/cyrillic_g2.pth'
+saved_model: './saved_models/cyrillic_g2.pth'
 FT: True
 optim: False
 lr: 1.
@@ -23,7 +23,7 @@ grad_clip: 5
 select_data: 'train'
 batch_ratio: '1' 
 total_data_usage_ratio: 1.0
-batch_max_length: 64
+batch_max_length: 256
 imgH: 64
 imgW: 600
 rgb: False
