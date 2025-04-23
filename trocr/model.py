@@ -9,7 +9,7 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW, Optimizer, Adadelta
 from clearml import Logger
-
+from typing import Tuple
 
 class TrOCRModel:
     def __init__(self, trocr_config: TransfomerOCRConfig):
@@ -19,7 +19,7 @@ class TrOCRModel:
         ).to(self.__config.device)
         self.__processor = TrOCRProcessor.from_pretrained(self.__config.processor_dir)
 
-    def inference(self, path_to_photo: Path) -> tuple[str, float]:
+    def inference(self, path_to_photo: Path) -> Tuple[str, float]:
         start_time = time.time()
         image = Image.open(path_to_photo).convert("RGB")
         pixel_values = self.__processor(images=image, return_tensors="pt").pixel_values
@@ -89,7 +89,7 @@ class TrOCRModel:
             plot_loss += loss.iem()
             if i % 2000 == 1999:
                 print(f"[{epoch_num + 1}, {i + 1:5d}] loss: {plot_loss / 2000:.3f}")
-                logger.report_scalar("loss", "train", plot_loss / 2000, iteration=i)
+                #logger.report_scalar("loss", "train", plot_loss / 2000, iteration=i)
                 plot_loss = 0.0
 
         return train_loss

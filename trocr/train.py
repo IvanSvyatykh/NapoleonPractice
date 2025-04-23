@@ -11,21 +11,21 @@ def train_trocr(trocr_config: TransfomerOCRConfig ,task:Task):
     train_dataset = PriceTagDataset(
         dataset_root_dir=trocr_config.path_to_train_dataset,
         path_for_metadata_file=trocr_config.path_to_train_dataset
-        / trocr_config.metadata_file_name,
+        / trocr_config.train_metadata_file_name,
         processor=model.processor,
     )
     val_dataset = PriceTagDataset(
         dataset_root_dir=trocr_config.path_to_val_dataset,
         path_for_metadata_file=trocr_config.path_to_val_dataset
-        / trocr_config.metadata_file_name,
+        / trocr_config.val_metadata_file_name,
         processor=model.processor,
     )
-    model.train(train_dataset, val_dataset , task.get_logger())
+    model.train(train_dataset, val_dataset , None)
 
 
 def main(trocr_config: TransfomerOCRConfig) -> None:
-    task = Task.init(project_name="trocr_project", task_name="train_model")
-    train_trocr(trocr_config,task)
+    task = Task.init(project_name="retail/ocr/trocr", task_name="train_model")
+    train_trocr(trocr_config,None)
 
 
 if __name__ == "__main__":

@@ -25,7 +25,6 @@ def validation(model: Model, criterion, evaluation_loader, converter, opt, devic
         text_for_pred = (
             torch.LongTensor(batch_size, opt.batch_max_length + 1).fill_(0).to(device)
         )
-
         text_for_loss, length_for_loss = converter.encode(
             labels, batch_max_length=opt.batch_max_length
         )
@@ -50,8 +49,10 @@ def validation(model: Model, criterion, evaluation_loader, converter, opt, devic
                 _, preds_index = preds.max(2)
                 preds_index = preds_index.view(-1)
                 preds_str = converter.decode_greedy(preds_index.data, preds_size.data)
+                
             elif opt.decode == "beamsearch":
                 preds_str = converter.decode_beamsearch(preds, beamWidth=2)
+            print(preds_str,labels)
 
         else:
             preds = model(image, text_for_pred, is_train=False)
@@ -68,7 +69,6 @@ def validation(model: Model, criterion, evaluation_loader, converter, opt, devic
             _, preds_index = preds.max(2)
             preds_str = converter.decode(preds_index, length_for_pred)
             labels = converter.decode(text_for_loss[:, 1:], length_for_loss)
-
         infer_time += forward_time
         valid_loss_avg.add(cost)
 
@@ -76,7 +76,6 @@ def validation(model: Model, criterion, evaluation_loader, converter, opt, devic
         preds_prob = F.softmax(preds, dim=2)
         preds_max_prob, _ = preds_prob.max(dim=2)
         confidence_score_list = []
-
         for gt, pred, pred_max_prob in zip(labels, preds_str, preds_max_prob):
             if "Attn" in opt.Prediction:
                 gt = gt[: gt.find("[s]")]

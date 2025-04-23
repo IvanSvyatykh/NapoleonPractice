@@ -11,7 +11,8 @@ class TransfomerOCRConfig:
         self.__path_to_test_dataset = Path(self.__config["path_to_test_dataset"])
         self.__path_to_train_dataset = Path(self.__config["path_to_train_dataset"])
         self.__path_to_val_dataset = Path(self.__config["path_to_val_dataset"])
-        self.__metadata_file_name = Path(self.__config["metadata_file_name"])
+        self.__train_metadata_file_name = Path(self.__config["train_metadata_file_name"])
+        self.__val_metadata_file_name = Path(self.__config["val_metadata_file_name"])
         self.__output_dir = Path(self.__config["output_dir"])
         self.__device = self.__config["device"]
         self.__optimizer = self.__config["optimizer"]
@@ -28,8 +29,12 @@ class TransfomerOCRConfig:
         return self.__path_to_processor_dir
 
     @property
-    def metadata_file_name(self) -> Path:
-        return self.__metadata_file_name
+    def train_metadata_file_name(self) -> Path:
+        return self.__train_metadata_file_name
+    
+    @property
+    def val_metadata_file_name(self) -> Path:
+        return self.__val_metadata_file_name
 
     @property
     def path_to_test_dataset(self) -> Path:

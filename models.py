@@ -81,36 +81,8 @@ class PaddleOCRModel(OCRModel):
         return result_text, end_time - start_time
 
 
-class EasyOCRModel(OCRModel):
-    def __init__(self, paddleocr_config: OCRModelConfig) -> None:
-        super().__init__(paddleocr_config)
-        self.__model = easyocr.Reader(
-            ["ru"],
-            model_storage_directory=self.model_dir,
-            gpu=self.device == "cuda",
-        )
 
-    def inference(self, path_to_photo: Path) -> tuple[str, float]:
-        start_time = time.time()
-        result = self.__model.readtext(str(path_to_photo))
-        res_dic = {}
-        for res in result:
-            coords = res[0]
-            text = res[1]
-            conf = res[2]
-            if not text.isdigit():
-                continue
 
-            res_dic[min([point[0] for point in coords])] = text, conf
-        answer = sorted(res_dic.values())
-        s = ""
-        for a in answer:
-            s += a[0]
-        end_time = time.time()
-        return s, end_time - start_time
-
-    def train(self, train_yaml_config: Path):
-        pass
 
 
 class DonutOCRModel(OCRModel):

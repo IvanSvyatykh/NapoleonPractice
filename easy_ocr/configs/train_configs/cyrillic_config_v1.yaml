@@ -1,15 +1,18 @@
 number: '0123456789'
 symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]№_`{|}~ €₽"
 lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяЂђЃѓЄєІіЇїЈјЉљЊњЋћЌќЎўЏџҐґҒғҚқҮүҲҳҶҷӀӏӢӣӨөӮӯ'
-experiment_name: 'ru_filtered'
-train_data: '/home/ivan/NapoleonIT/OCR/data/train'
-valid_data: '/home/ivan/NapoleonIT/OCR/data/val'
+experiment_name: 'cyrillic_model_4000_iter'
+train_data: '../data/train_limited_50'
+valid_data: '../data/val'
+task_name : 'cyrillic_g2_4000'
+train_metadata_file_name : "annotations_train_limited_50.txt"
+val_metadata_file_name : "annotations_val.txt"
 manualSeed: 1111
 workers: 6
-batch_size: 64  
-num_iter: 30000 
+batch_size: 64
+num_iter: 4000
 valInterval: 200
-saved_model: '/home/ivan/NapoleonIT/OCR/easyocr/saved_models/cyrillic_g2.pth'
+saved_model: '../saved_models/cyrillic_g2.pth'
 FT: True
 optim: False
 lr: 1.
@@ -20,7 +23,7 @@ grad_clip: 5
 select_data: 'train'
 batch_ratio: '1' 
 total_data_usage_ratio: 1.0
-batch_max_length: 68 
+batch_max_length: 64
 imgH: 64
 imgW: 600
 rgb: False

@@ -1,0 +1,6 @@
+path_to_model_dir : "./trained_model/model"
+dataset_dir: "../data/dataset_val_100smpl"
+metadata_filename: "annotations.txt"
+results_dir: "../results/EasyOCR-1.7.2"
+device: "cuda"  
+        

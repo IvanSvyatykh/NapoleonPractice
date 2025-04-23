@@ -13,8 +13,8 @@ class PriceTagDataset(Dataset):
         path_for_metadata_file: Path,
         processor: TrOCRProcessor,
     ) -> None:
-        assert dataset_root_dir.exists()
-        assert path_for_metadata_file.exists()
+        assert dataset_root_dir.exists(), f"{dataset_root_dir} does not exists"
+        assert path_for_metadata_file.exists(), f"{path_for_metadata_file} does not exists"
 
         self.__dataset_root_dir = dataset_root_dir
         self.__metadata = path_for_metadata_file
