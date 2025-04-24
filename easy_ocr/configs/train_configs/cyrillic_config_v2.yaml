@@ -1,10 +1,10 @@
 number: '0123456789'
 symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]№_`{|}~ €₽"
 lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяЂђЃѓЄєІіЇїЈјЉљЊњЋћЌќЎўЏџҐґҒғҚқҮүҲҳҶҷӀӏӢӣӨөӮӯ'
-experiment_name: 'cyrillic_model_8000_iter'
+experiment_name: 'cyrillic_model_8000_iter_Adadelta'
 train_data: '../data/train_limited_50'
 valid_data: '../data/val'
-task_name : 'cyrillic_g2_8000'
+task_name : 'cyrillic_g2_8000_Adadelta'
 train_metadata_file_name : "annotations_train_limited_50.txt"
 val_metadata_file_name : "annotations_val.txt"
 manualSeed: 1111
@@ -14,7 +14,7 @@ num_iter: 8000
 valInterval: 200
 saved_model: './saved_models/cyrillic_g2.pth'
 FT: True
-optim: False
+optim: "Adadelta"
 lr: 1.
 beta1: 0.9
 rho: 0.95
