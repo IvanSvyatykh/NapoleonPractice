@@ -18,7 +18,8 @@ from utils import CTCLabelConverter, AttnLabelConverter, Averager, AttrDict
 from dataset import hierarchical_dataset, AlignCollate, Batch_Balanced_Dataset
 from model import Model
 from validate import validation
-
+from typing import Union
+from torch.optim.optimizer import Optimizer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -106,7 +107,7 @@ def load_model(config: AttrDict) -> Model:
     return model
 
 
-def create_converter(config: AttrDict) -> CTCLabelConverter | AttnLabelConverter:
+def create_converter(config: AttrDict) -> Union[CTCLabelConverter, AttnLabelConverter]:
     if "CTC" in config.Prediction:
         converter = CTCLabelConverter(config.character)
     else:
@@ -114,7 +115,7 @@ def create_converter(config: AttrDict) -> CTCLabelConverter | AttnLabelConverter
     return converter
 
 
-def create_criterion(config: AttrDict) -> torch.nn.CTCLoss | torch.nn.CrossEntropyLoss:
+def create_criterion(config: AttrDict) -> Union[torch.nn.CTCLoss ,torch.nn.CrossEntropyLoss]:
     if "CTC" in config.Prediction:
         criterion = torch.nn.CTCLoss(zero_infinity=True).to(device)
     else:
@@ -122,11 +123,15 @@ def create_criterion(config: AttrDict) -> torch.nn.CTCLoss | torch.nn.CrossEntro
     return criterion
 
 
-def create_optimizer(config: AttrDict, params: list) -> torch.optim.optimizer.Optimizer:
-    if config.optim == "adam":
-        optimizer = optim.Adam(params, lr=config.lr, eps=config.eps)
-    else:
+def create_optimizer(config: AttrDict, params: list) ->Optimizer :
+    if config.optim == "Adam":
+        optimizer = optim.Adam(params, lr=config.lr, eps=config.eps,betas=(config.beta1,config.rho))
+    elif config.optim == "AdamW":
+        optimizer = optim.AdamW(params, lr=config.lr, eps=config.eps , betas=(config.beta1,config.rho))
+    elif config.optim == "Adadelta":
         optimizer = optim.Adadelta(params, lr=config.lr, rho=config.rho, eps=config.eps)
+    else:
+        raise ValueError(f"Unknown optimizer {config.optim}")
     return optimizer
 
 
@@ -155,9 +160,6 @@ def write_config_to_file(config: AttrDict) -> None:
         print(opt_log)
         config_file.write(opt_log)
 
-
-
-def train_epoch(model:Model,)
 
 def train(
     config: AttrDict, task: Task, show_number: int = 2, amp: bool = False
