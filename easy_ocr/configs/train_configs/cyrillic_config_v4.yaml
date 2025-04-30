@@ -1,10 +1,10 @@
 number: '0123456789'
 symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]№_`{|}~ €₽"
 lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяЂђЃѓЄєІіЇїЈјЉљЊњЋћЌќЎўЏџҐґҒғҚқҮүҲҳҶҷӀӏӢӣӨөӮӯ'
-experiment_name: 'cyrillic_model_8000_iter_Adadelta'
+experiment_name: 'cyrillic_g2_8000_Adadelta_with_GradScaler'
 train_data: '../data/train_limited_50'
 valid_data: '../data/val'
-task_name : 'cyrillic_g2_8000_Adadelta'
+task_name : 'cyrillic_g2_8000_Adadelta_with_GradScaler'
 train_metadata_file_name : "annotations_train_limited_50.txt"
 val_metadata_file_name : "annotations_val.txt"
 manualSeed: 1111
@@ -44,4 +44,4 @@ decode: 'greedy'
 new_prediction: False
 freeze_FeatureFxtraction: False
 freeze_SequenceModeling: False 
-amp: False 
+amp: True

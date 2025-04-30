@@ -20,7 +20,7 @@ beta1: 0.9
 rho: 0.95
 eps: 0.00000001
 grad_clip: 5
-select_data: 'train'
+select_data: 'images'
 batch_ratio: '1' 
 total_data_usage_ratio: 1.0
 batch_max_length: 256
@@ -44,3 +44,4 @@ decode: 'greedy'
 new_prediction: False
 freeze_FeatureFxtraction: False
 freeze_SequenceModeling: False 
+amp: False 

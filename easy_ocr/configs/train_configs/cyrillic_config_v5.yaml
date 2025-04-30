@@ -1,21 +1,21 @@
 number: '0123456789'
 symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]№_`{|}~ €₽"
 lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяЂђЃѓЄєІіЇїЈјЉљЊњЋћЌќЎўЏџҐґҒғҚқҮүҲҳҶҷӀӏӢӣӨөӮӯ'
-experiment_name: 'cyrillic_model_8000_iter_Adadelta'
+experiment_name: 'cyrillic_g2_10000_Adadelta_v5'
 train_data: '../data/train_limited_50'
 valid_data: '../data/val'
-task_name : 'cyrillic_g2_8000_Adadelta'
+task_name : 'cyrillic_g2_10000_Adadelta_v5'
 train_metadata_file_name : "annotations_train_limited_50.txt"
 val_metadata_file_name : "annotations_val.txt"
 manualSeed: 1111
 workers: 6
 batch_size: 128
-num_iter: 8000
+num_iter: 10000
 valInterval: 200
 saved_model: './saved_models/cyrillic_g2.pth'
 FT: True
 optim: "Adadelta"
-lr: 1.
+lr: 0.1
 beta1: 0.9
 rho: 0.95
 eps: 0.00000001
@@ -44,4 +44,4 @@ decode: 'greedy'
 new_prediction: False
 freeze_FeatureFxtraction: False
 freeze_SequenceModeling: False 
-amp: False 
+amp: True
