@@ -21,7 +21,7 @@ from validate import validation
 from typing import Union
 from torch.optim.optimizer import Optimizer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+device_str = "cuda" if torch.cuda.is_available() else "cpu"
 
 def get_config(file_path: Path) -> AttrDict:
     with open(file_path, "r", encoding="utf8") as stream:
@@ -38,7 +38,7 @@ def get_config(file_path: Path) -> AttrDict:
                 usecols=["filename", "words"],
                 keep_default_na=False,
             )
-            all_char = "".join(df["words"])
+            all_char = "".join(df["words"].astype(str))
             characters += "".join(set(all_char))
         characters = sorted(set(characters))
         opt.character = "".join(characters)
@@ -243,7 +243,7 @@ def train(
         optimizer.zero_grad(set_to_none=True)
 
         if amp:
-            with autocast():
+            with autocast(device_type=device_str):
                 image_tensors, labels = train_dataset.get_batch()
                 image = image_tensors.to(device)
                 text, length = converter.encode(
@@ -396,7 +396,7 @@ def main(path_to_conf: Path) -> None:
     add_csv_to_img_dir(Path(config.train_data), config.train_metadata_file_name)
     add_csv_to_img_dir(Path(config.valid_data), config.val_metadata_file_name)
     print(f"Start train on {device}")
-    train(config=config, task=task)
+    train(config=config, task=task,amp=config.amp)
 
 
 if __name__ == "__main__":
