@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /data/models
 RUN mkdir -p /data/data/train_limited_50
 RUN mkdir -p /data/data/val
-COPY ./train_limited_50 /data/data/train_limited_50
-COPY ./val /data/data/val
+COPY train_limited_50 /data/data/train_limited_50
+COPY val /data/data/val
 COPY ./models /data/models
 COPY ./clearml.conf /
 COPY ./requirements.txt /data/requirements.txt
