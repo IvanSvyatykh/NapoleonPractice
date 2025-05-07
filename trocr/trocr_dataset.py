@@ -1,3 +1,4 @@
+from typing import Dict
 import torch
 import pandas as pd
 from torch.utils.data import Dataset
@@ -31,7 +32,7 @@ class PriceTagDataset(Dataset):
     def __len__(self) -> int:
         return self.__df.shape[0]
 
-    def __getitem__(self, idx: int):
+    def __getitem__(self, idx: int)->Dict[str,torch.Tensor]:
         file_name = self.__df["file_name"][idx]
         text = self.__df["text"][idx]
         image = Image.open(self.__dataset_root_dir / file_name).convert("RGB")
@@ -44,8 +45,4 @@ class PriceTagDataset(Dataset):
             for label in labels
         ]
 
-        encoding = {
-            "pixel_values": pixel_values.squeeze(),
-            "labels": torch.tensor(labels),
-        }
-        return encoding
+        return  pixel_values.squeeze(),torch.tensor(labels)

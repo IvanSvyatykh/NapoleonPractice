@@ -6,7 +6,7 @@ path_to_val_dataset : "../data/val"
 train_metadata_file_name : "annotations_train_limited_50.txt"
 val_metadata_file_name : "annotations_val.txt"
 output_dir: "./results/microsofttrocr-large-printed"
-device: "cuda"
+device: "cpu"
 optimizer: "AdamW"
 optimizer_step : 5e-5
 epoch : 10

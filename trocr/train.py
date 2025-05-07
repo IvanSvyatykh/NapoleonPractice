@@ -20,12 +20,15 @@ def train_trocr(trocr_config: TransfomerOCRConfig ,task:Task):
         / trocr_config.val_metadata_file_name,
         processor=model.processor,
     )
-    model.train(train_dataset, val_dataset , None)
+    model.train(train_dataset, val_dataset , task.get_logger())
 
 
 def main(trocr_config: TransfomerOCRConfig) -> None:
     task = Task.init(project_name="retail/ocr/trocr", task_name="train_model")
-    train_trocr(trocr_config,None)
+    Task.execute_remotely(task,queue_name="pavlov_0")
+    Task.add_requirements("./trocr/requirements.txt")
+    Task.set_base_docker(task,docker_image="ivansvyatykh/trocr")
+    train_trocr(trocr_config,task)
 
 
 if __name__ == "__main__":
