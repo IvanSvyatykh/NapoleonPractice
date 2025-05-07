@@ -1,5 +1,5 @@
-path_to_model_dir : "./models/microsofttrocr-large-printed/model_default"
-path_to_processor_dir : "./models/microsofttrocr-large-printed/processor_default"
+path_to_model_dir : "/data/models/microsofttrocr-large-printed/model_default"
+path_to_processor_dir : "/data/models/microsofttrocr-large-printed/processor_default"
 path_to_test_dataset : "../data/test"
 path_to_train_dataset : "../data/train_limited_50"
 path_to_val_dataset : "../data/val"
@@ -9,5 +9,6 @@ output_dir: "./results/microsofttrocr-large-printed"
 device: "cuda"
 optimizer: "AdamW"
 optimizer_step : 5e-5
-epoch : 10
-batch_size : 2
+epoch : 50
+batch_size : 64
+task_name : "train_trocr_printed"
