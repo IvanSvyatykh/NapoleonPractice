@@ -19,6 +19,11 @@ class TransfomerOCRConfig:
         self.__optimizer_step = float(self.__config["optimizer_step"])
         self.__epoch = int(self.__config["epoch"])
         self.__batch_size = int(self.__config["batch_size"])
+        self.__task_name = self.__config["task_name"]
+
+    @property
+    def task_name(self)->str:
+        return self.__task_name
 
     @property
     def path_to_model_dir(self) -> Path:

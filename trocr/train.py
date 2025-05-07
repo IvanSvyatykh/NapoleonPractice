@@ -24,7 +24,7 @@ def train_trocr(trocr_config: TransfomerOCRConfig ,task:Task):
 
 
 def main(trocr_config: TransfomerOCRConfig) -> None:
-    task = Task.init(project_name="retail/ocr/trocr", task_name="train_model")
+    task = Task.init(project_name="retail/ocr/trocr", task_name=trocr_config.task_name)
     Task.execute_remotely(task,queue_name="pavlov_0")
     Task.add_requirements("./trocr/requirements.txt")
     Task.set_base_docker(task,docker_image="ivansvyatykh/trocr")
