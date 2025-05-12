@@ -6,7 +6,7 @@ from model import TrOCRModel
 from clearml import Task
 
 
-def train_trocr(trocr_config: TransfomerOCRConfig ,task:Task):
+def train_trocr(trocr_config: TransfomerOCRConfig, task: Task):
     model = TrOCRModel(trocr_config)
     train_dataset = PriceTagDataset(
         dataset_root_dir=trocr_config.path_to_train_dataset,
@@ -20,15 +20,18 @@ def train_trocr(trocr_config: TransfomerOCRConfig ,task:Task):
         / trocr_config.val_metadata_file_name,
         processor=model.processor,
     )
-    model.train(train_dataset, val_dataset , task.get_logger())
+    model.train(train_dataset, val_dataset, task.get_logger())
 
 
 def main(trocr_config: TransfomerOCRConfig) -> None:
     task = Task.init(project_name="retail/ocr/trocr", task_name=trocr_config.task_name)
-    Task.execute_remotely(task,queue_name="pavlov_0")
-    Task.add_requirements("./trocr/requirements.txt")
-    Task.set_base_docker(task,docker_image="ivansvyatykh/trocr")
-    train_trocr(trocr_config,task)
+    task.execute_remotely(queue_name="pavlov_0")
+    task.add_requirements("./trocr/requirements.txt")
+    task.set_base_docker(
+        docker_image="ivansvyatykh/trocr:latest", 
+        docker_arguments="--pull always",docker_setup_bash_script="docker pull ivansvyatykh/trocr:latest"
+    )
+    train_trocr(trocr_config, task)
 
 
 if __name__ == "__main__":
