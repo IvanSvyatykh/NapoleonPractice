@@ -6,28 +6,18 @@ class TransfomerOcrTrainConfig:
     def __init__(self, path_to_yaml: Path):
         assert path_to_yaml.exists()
         self.__config = yaml.load(open(path_to_yaml), Loader=yaml.SafeLoader)
-        # Local paths
-        self.__path_to_local_model_dir = Path(self.__config["path_to_local_model_dir"])
-        self.__path_to_local_processor_dir = Path(
-            self.__config["path_to_local_processor_dir"]
-        )
-        self.__path_to_local_test_dataset = Path(
-            self.__config["path_to_local_test_dataset"]
-        )
-        self.__path_to_local_train_dataset = Path(
-            self.__config["path_to_local_train_dataset"]
-        )
-        self.__path_to_local_val_dataset = Path(
-            self.__config["path_to_local_val_dataset"]
-        )
+        # Datasets
+        self.__train_dataset_id = self.__config["train_dataset_id"]
+        self.__val_dataset_id = self.__config["val_dataset_id"]
+        # Model
+        self.__task_id = self.__config["task_id"]
+        self.__model_artifact = self.__config["model_artifact"]
+        self.__processor_artifact = self.__config["processor_artifact"]
         # Artifacts name
-        self.__agent_model_dir = self.__config["agent_model_dir"]
-        self.__agent_processor_dir = self.__config["agent_processor_dir"]
-        self.__agent_train_dataset = self.__config["agent_train_dataset"]
-        self.__agent_val_dataset = self.__config["agent_val_dataset"]
-        self.__agent_test_dataset = self.__config["agent_test_dataset"]
-        self.__artifact_processor_name = self.__config["artifact_processor_name"]
-        self.__artifact_model_name = self.__config["artifact_model_name"]
+        self.__agent_model_dir = Path(self.__config["agent_model_dir"])
+        self.__agent_processor_dir = Path(self.__config["agent_processor_dir"])
+        self.__agent_train_dataset = Path(self.__config["agent_train_dataset"])
+        self.__agent_val_dataset = Path(self.__config["agent_val_dataset"])
 
         # Other info
         self.__train_metadata_file_name = Path(
@@ -43,36 +33,29 @@ class TransfomerOcrTrainConfig:
         self.__task_name = self.__config["task_name"]
         self.__queue_name = self.__config["queue_name"]
 
-    # Local paths
+    # Datasets
     @property
-    def path_to_local_model_dir(self) -> Path:
-        return self.__path_to_local_model_dir
+    def train_dataset_id(self) -> Path:
+        return self.__train_dataset_id
 
     @property
-    def path_to_local_processor_dir(self) -> Path:
-        return self.__path_to_local_processor_dir
+    def val_dataset_id(self) -> Path:
+        return self.__val_dataset_id
+
+    # Model
+    @property
+    def task_id(self) -> Path:
+        return self.__task_id
 
     @property
-    def path_to_local_test_dataset(self) -> Path:
-        return self.__path_to_local_test_dataset
+    def model_artifact(self) -> Path:
+        return self.__model_artifact
 
     @property
-    def path_to_local_train_dataset(self) -> Path:
-        return self.__path_to_local_train_dataset
-
-    @property
-    def path_to_local_val_dataset(self) -> Path:
-        return self.__path_to_local_val_dataset
+    def processor_artifact(self) -> Path:
+        return self.__processor_artifact
 
     # Artifacts name
-
-    @property
-    def artifact_model_name(self) -> str:
-        return self.__artifact_model_name
-
-    @property
-    def artifact_processor_name(self) -> str:
-        return self.__artifact_processor_name
 
     @property
     def agent_model_dir(self) -> str:
@@ -89,10 +72,6 @@ class TransfomerOcrTrainConfig:
     @property
     def agent_val_dataset(self) -> str:
         return self.__agent_val_dataset
-
-    @property
-    def agent_test_dataset(self) -> str:
-        return self.__agent_test_dataset
 
     # Other info
     @property

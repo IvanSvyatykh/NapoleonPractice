@@ -4,7 +4,7 @@ import os
 from typing import Dict
 from clearml import Dataset, Task
 from pathlib import Path
-from trocr.utils.load_config import TransfomerOcrLoadConfig
+from utils.load_config import TransfomerOcrLoadConfig
 
 
 def upload_dataset(
@@ -77,19 +77,20 @@ def download_dataset(config: Dict[str, str]) -> str:
         return dataset_path
 
 
-def download_pretrained_model(task: Task, save_dir: str, artefact_name: str) -> None:
+def download_pretrained_model(
+    save_dir: str, artefact_name: str, task_id: str = None
+) -> str:
 
-    if not task:
+    if not task_id:
         return None
 
-    logging.warning(f"Загрузка предобученной модели из задачи ClearML ID: {task.id}")
+    logging.warning(f"Загрузка предобученной модели из задачи ClearML ID: {task_id}")
     os.makedirs(save_dir, exist_ok=True)
-
     # Получаем задачу ClearML
-
+    task = Task.get_task(task_id=task_id)
+    print(task.artifacts.keys())
     if task.artifacts.get(artefact_name):
-        # Сначала пробуем найти best_model
-        model_path = task.artifacts["best_model"].get_local_copy()
+        model_path = task.artifacts[artefact_name].get_local_copy()
     else:
         logging.warning(f"Не найдены артефакты {artefact_name} в указанной задаче")
         raise AttributeError(f"Can not find artefact with name {artefact_name}")
@@ -97,8 +98,9 @@ def download_pretrained_model(task: Task, save_dir: str, artefact_name: str) -> 
     if model_path and model_path.endswith(".zip"):
         with zipfile.ZipFile(model_path, "r") as zip_ref:
             zip_ref.extractall(save_dir)
+        return os.path.join()
     else:
         logging.warning(
             f"Предупреждение: Загруженный артефакт не является zip-архивом или не существует: {model_path}"
         )
-        return None
+        return model_path

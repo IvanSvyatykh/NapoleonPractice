@@ -5,7 +5,7 @@ import torch
 from transformers import VisionEncoderDecoderModel, TrOCRProcessor
 from pathlib import Path
 from tqdm import tqdm
-from config import TransfomerOCRConfig
+from utils.train_config import TransfomerOcrTrainConfig
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW, Optimizer, Adadelta
@@ -14,11 +14,7 @@ from typing import Tuple
 
 
 class TrOCRModel:
-    def __init__(self, trocr_config: TransfomerOCRConfig):
-        model_dir = f"{os.getenv('CLEARML_OUTPUT_PATH')}/{trocr_config.agent_model_dir}"
-        processor_dir = (
-            f"{os.getenv('CLEARML_OUTPUT_PATH')}/{trocr_config.agent_processor_dir}"
-        )
+    def __init__(self, trocr_config: TransfomerOcrTrainConfig , model_dir:str , processor_dir:str):
         self.__config = trocr_config
         self.__model = VisionEncoderDecoderModel.from_pretrained(model_dir).to(
             self.__config.device

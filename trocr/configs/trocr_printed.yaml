@@ -1,16 +1,14 @@
-# Local paths
-path_to_local_model_dir : "./models/microsofttrocr-large-printed/model_default"
-path_to_local_processor_dir: "./models/microsofttrocr-large-printed/processor_default"
-path_to_local_test_dataset : ""
-path_to_local_train_dataset : "./train_limited_50"
-path_to_local_val_dataset : "./val"
+# Datasets
+train_dataset_id : "be957f87b2e94224b2559244d91cbbb7"
+val_dataset_id : "c624941404fc4c8283e507ec86134e8e"
+# Model 
+task_id : "6fa8bbfa32e14d519234ef424c62ed64"
+model_artifact : "model"
+processor_artifact : "processor"
 # Artifacts name
 agent_model_dir : "./model"
-artifact_model_name : "model"
-artifact_processor_name : "processor"
 agent_processor_dir: "./processor"
 agent_train_dataset : "./dataset/train"
-agent_test_dataset : ""
 agent_val_dataset : "./dataset/val"
 #Other info
 train_metadata_file_name : "annotations_train_limited_50.txt"
