@@ -2,7 +2,7 @@ import yaml
 from pathlib import Path
 
 
-class TransfomerOCRConfig:
+class TransfomerOcrTrainConfig:
     def __init__(self, path_to_yaml: Path):
         assert path_to_yaml.exists()
         self.__config = yaml.load(open(path_to_yaml), Loader=yaml.SafeLoader)

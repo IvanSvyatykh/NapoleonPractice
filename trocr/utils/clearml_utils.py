@@ -4,7 +4,7 @@ import os
 from typing import Dict
 from clearml import Dataset, Task
 from pathlib import Path
-from config import TransfomerOCRConfig
+from trocr.utils.load_config import TransfomerOcrLoadConfig
 
 
 def upload_dataset(
@@ -38,7 +38,7 @@ def upload_dataset(
     return dataset_id
 
 
-def upload_model_as_artifact(trocr_config: TransfomerOCRConfig, task: Task) -> None:
+def upload_model_as_artifact(trocr_config: TransfomerOcrLoadConfig, task: Task) -> None:
 
     is_model_artifact = task.upload_artifact(
         name=trocr_config.artifact_model_name,
@@ -77,28 +77,21 @@ def download_dataset(config: Dict[str, str]) -> str:
         return dataset_path
 
 
-def download_pretrained_model(
-    clearml_task_id: str, save_dir: str, artefact_name: str
-) -> None:
+def download_pretrained_model(task: Task, save_dir: str, artefact_name: str) -> None:
 
-    if not clearml_task_id:
+    if not task:
         return None
 
-    logging.warning(
-        f"Загрузка предобученной модели из задачи ClearML ID: {clearml_task_id}"
-    )
+    logging.warning(f"Загрузка предобученной модели из задачи ClearML ID: {task.id}")
     os.makedirs(save_dir, exist_ok=True)
 
     # Получаем задачу ClearML
-    task = Task.get_task(task_id=clearml_task_id)
 
     if task.artifacts.get(artefact_name):
         # Сначала пробуем найти best_model
         model_path = task.artifacts["best_model"].get_local_copy()
     else:
-        logging.warning(
-            "Не найдены артефакты 'best_model' или 'model' в указанной задаче"
-        )
+        logging.warning(f"Не найдены артефакты {artefact_name} в указанной задаче")
         raise AttributeError(f"Can not find artefact with name {artefact_name}")
 
     if model_path and model_path.endswith(".zip"):
