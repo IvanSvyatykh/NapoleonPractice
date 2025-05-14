@@ -32,13 +32,13 @@ def train_trocr(trocr_config: TransfomerOCRConfig, task: Task):
 
 
 def upload_dataset_task(trocr_config: TransfomerOCRConfig) -> Dict[str, str]:
-
+    
     upload_dataset_task = Task.init(
         project_name="retail/ocr/trocr",
         task_name="upload_dataset",
         task_type=Task.TaskTypes.data_processing,
     )
-
+    upload_dataset_task.add_requirements("boto3","1.9")
     upload_dataset_task.execute_remotely(queue_name=trocr_config.queue_name)
     train_dataset_id = upload_dataset(
         project_name="retail",
@@ -119,7 +119,6 @@ def download_model_task(trocr_config: TransfomerOCRConfig, prev_task_id: str) ->
 
 
 def main(trocr_config: TransfomerOCRConfig) -> None:
-    #Task.add_requirements("requirements.txt")
     res = upload_dataset_task(trocr_config)
     download_dataset_id = download_dataset_task(trocr_config, res)
     upload_model_id = upload_model_taks(trocr_config, download_dataset_id)
