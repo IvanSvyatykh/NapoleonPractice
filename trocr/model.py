@@ -1,3 +1,4 @@
+import os
 import time
 import numpy as np
 import torch
@@ -14,11 +15,15 @@ from typing import Tuple
 
 class TrOCRModel:
     def __init__(self, trocr_config: TransfomerOCRConfig):
+        model_dir = f"{os.getenv('CLEARML_OUTPUT_PATH')}/{trocr_config.agent_model_dir}"
+        processor_dir = (
+            f"{os.getenv('CLEARML_OUTPUT_PATH')}/{trocr_config.agent_processor_dir}"
+        )
         self.__config = trocr_config
-        self.__model = VisionEncoderDecoderModel.from_pretrained(
-            self.__config.path_to_model_dir
-        ).to(self.__config.device)
-        self.__processor = TrOCRProcessor.from_pretrained(self.__config.processor_dir)
+        self.__model = VisionEncoderDecoderModel.from_pretrained(model_dir).to(
+            self.__config.device
+        )
+        self.__processor = TrOCRProcessor.from_pretrained(processor_dir)
 
     def inference(self, path_to_photo: Path) -> Tuple[str, float]:
         start_time = time.time()
@@ -38,6 +43,7 @@ class TrOCRModel:
     ) -> None:
         if self.__config.optimizer not in optimizers.keys():
             raise ValueError(f"Supports only this optimizers : {optimizers.values()}")
+        torch.cuda.empty_cache()
         train_dataloader = DataLoader(
             train_dataset, batch_size=self.__config.batch_size, shuffle=True
         )
@@ -49,7 +55,7 @@ class TrOCRModel:
         prev_val_accuracy = 0
         for epoch in range(self.__config.epoch):
             self.__model.train()
-            train_loss = self.__train_loop(train_dataloader, optimizer, epoch, logger)
+            train_loss = self.__train_loop(train_dataloader, optimizer)
             logger.report_scalar("Train loss", "train", train_loss, iteration=epoch)
             print(f"Train loss after epoch {epoch}:", train_loss)
             self.__model.eval()
@@ -84,7 +90,8 @@ class TrOCRModel:
     ) -> float:
         train_loss = 0.0
         for images, labels in tqdm(train_dataloader):
-
+            images = images.to(self.__config.device)
+            labels = labels.to(self.__config.device)
             outputs = self.__model(images, labels=labels)
             loss = outputs.loss
             loss.backward()

@@ -1,14 +1,25 @@
-path_to_model_dir : "/data/models/microsofttrocr-large-printed/model_default"
-path_to_processor_dir : "/data/models/microsofttrocr-large-printed/processor_default"
-path_to_test_dataset : "/data/data/test"
-path_to_train_dataset : "/data/data/train_limited_50"
-path_to_val_dataset : "/data/data/val"
+# Local paths
+path_to_local_model_dir : "./models/microsofttrocr-large-printed/model_default"
+path_to_local_processor_dir: "./models/microsofttrocr-large-printed/processor_default"
+path_to_local_test_dataset : ""
+path_to_local_train_dataset : "./train_limited_50"
+path_to_local_val_dataset : "./val"
+# Artifacts name
+agent_model_dir : "./model"
+artifact_model_name : "model"
+artifact_processor_name : "processor"
+agent_processor_dir: "./processor"
+agent_train_dataset : "./dataset"
+agent_test_dataset : ""
+agent_val_dataset : "./dataset"
+#Other info
 train_metadata_file_name : "annotations_train_limited_50.txt"
 val_metadata_file_name : "annotations_val.txt"
-output_dir: "/dataresults/microsofttrocr-large-printed"
+output_dir: "./results/microsofttrocr-large-printed"
 device: "cuda"
 optimizer: "AdamW"
 optimizer_step : 5e-5
 epoch : 50
-batch_size : 64
+batch_size : 16
 task_name : "train_trocr_printed"
+queue_name : "pavlov_0"
