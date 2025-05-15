@@ -46,7 +46,7 @@ def upload_model_as_artifact(trocr_config: TransfomerOcrLoadConfig, task: Task) 
     )
     if not is_model_artifact:
         logging.error(f"Could not upload model as artifact.")
-        raise AttributeError(f"Stop execution because artifact was't uploaded")
+        raise AttributeError(f"Stop execution because artifact wasn't uploaded")
 
     is_processor_artifact = task.upload_artifact(
         name=trocr_config.artifact_processor_name,
@@ -55,7 +55,7 @@ def upload_model_as_artifact(trocr_config: TransfomerOcrLoadConfig, task: Task) 
 
     if not is_processor_artifact:
         logging.error(f"Could not upload processor as artifact.")
-        raise AttributeError(f"Stop execution because artifact was't uploaded")
+        raise AttributeError(f"Stop execution because artifact wasn't uploaded")
 
 
 def download_dataset(config: Dict[str, str]) -> str:
