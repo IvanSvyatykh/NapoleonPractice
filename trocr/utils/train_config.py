@@ -4,7 +4,7 @@ from pathlib import Path
 
 class TransfomerOcrTrainConfig:
     def __init__(self, path_to_yaml: Path):
-        assert path_to_yaml.exists()
+        assert path_to_yaml.exists() , f"File does not exists {path_to_yaml}"
         self.__config = yaml.load(open(path_to_yaml), Loader=yaml.SafeLoader)
         # Datasets
         self.__train_dataset_id = self.__config["train_dataset_id"]
