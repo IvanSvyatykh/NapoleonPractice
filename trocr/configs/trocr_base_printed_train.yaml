@@ -17,7 +17,7 @@ output_dir: "./results/microsofttrocr-large-printed"
 device: "cuda"
 optimizer: "AdamW"
 optimizer_step : 5e-5
-epoch : 50
-batch_size : 16
+epoch : 20
+batch_size : 64
 task_name : "train_trocr_base_printed"
 queue_name : "pavlov_0"
