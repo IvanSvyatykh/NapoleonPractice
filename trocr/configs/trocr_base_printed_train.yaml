@@ -18,6 +18,6 @@ device: "cuda"
 optimizer: "AdamW"
 optimizer_step : 5e-5
 epoch : 20
-batch_size : 32
+batch_size : 16
 task_name : "train_trocr_base_printed"
 queue_name : "pavlov_0"
