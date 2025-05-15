@@ -10,3 +10,5 @@ models/
 *.model
 *.pth
 *.txt
+*.pdparams
+*.csv
