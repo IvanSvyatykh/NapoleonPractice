@@ -1,0 +1,10 @@
+# Local paths
+path_to_local_model_dir : "./models/microsofttrocr-base-printed/model_default"
+path_to_local_processor_dir: "./models/microsofttrocr-base-printed/processor_default"
+path_to_local_train_dataset : "./train_limited_50"
+path_to_local_val_dataset : "./val"
+# Artifacts name
+artifact_model_name : "model"
+artifact_processor_name : "processor"
+#Other info
+task_name : "load_base_model"
