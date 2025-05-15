@@ -73,6 +73,7 @@ class TrOCRModel:
                     self.__config.output_dir / f"val_accuracy_{val_accuracy}"
                 )
                 self.save_model(best_model_path)
+                task.upload_artifact("best model", artifact_object=best_model_path)
 
         self.save_model(
             self.__config.output_dir / f"finished_model_accuracy_{val_accuracy}"
@@ -112,7 +113,9 @@ class TrOCRModel:
         val_loss = 0
         with torch.no_grad():
             for images, labels in tqdm(val_dataloader):
-                outputs = self.__model.generate(images.to(self.__config.device))
+                images = images.to(self.__config.device)
+                labels = labels.to(self.__config.device)
+                outputs = self.__model.generate(images)
                 outputs = self.__model(images, labels=labels)
                 loss = outputs.loss
                 val_loss += loss.item()
