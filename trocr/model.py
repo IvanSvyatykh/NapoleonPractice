@@ -9,12 +9,14 @@ from utils.train_config import TransfomerOcrTrainConfig
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW, Optimizer, Adadelta
-from clearml import Logger
+from clearml import Task
 from typing import Tuple
 
 
 class TrOCRModel:
-    def __init__(self, trocr_config: TransfomerOcrTrainConfig , model_dir:str , processor_dir:str):
+    def __init__(
+        self, trocr_config: TransfomerOcrTrainConfig, model_dir: str, processor_dir: str
+    ):
         self.__config = trocr_config
         self.__model = VisionEncoderDecoderModel.from_pretrained(model_dir).to(
             self.__config.device
@@ -34,9 +36,7 @@ class TrOCRModel:
             time_delta,
         )
 
-    def train(
-        self, train_dataset: Dataset, val_dataset: Dataset, logger: Logger
-    ) -> None:
+    def train(self, train_dataset: Dataset, val_dataset: Dataset, task: Task) -> None:
         if self.__config.optimizer not in optimizers.keys():
             raise ValueError(f"Supports only this optimizers : {optimizers.values()}")
         torch.cuda.empty_cache()
@@ -49,27 +49,35 @@ class TrOCRModel:
         )
         self.__set_train_params_for_model()
         prev_val_accuracy = 0
+        best_model_path = None
         for epoch in range(self.__config.epoch):
             self.__model.train()
             train_loss = self.__train_loop(train_dataloader, optimizer)
-            logger.report_scalar("Train loss", "train", train_loss, iteration=epoch)
+            task.get_logger().report_scalar(
+                "Train loss", "train", train_loss, iteration=epoch
+            )
             print(f"Train loss after epoch {epoch}:", train_loss)
             self.__model.eval()
             val_accuracy, val_loss = self.__val_loop(val_dataloader)
-            logger.report_scalar(
+            task.get_logger().report_scalar(
                 "Val accuracy", "accuracy", val_accuracy, iteration=epoch
             )
-            logger.report_scalar("Val loss", "loss", val_loss, iteration=epoch)
+            task.get_logger().report_scalar(
+                "Val loss", "loss", val_loss, iteration=epoch
+            )
             print(f"Val loss after epoch {epoch}:", val_loss)
             print(f"Validation Accuracy after epoch {epoch}:", val_accuracy)
             if prev_val_accuracy > val_accuracy:
                 prev_val_accuracy = val_accuracy
-                self.save_model(
+                best_model_path = (
                     self.__config.output_dir / f"val_accuracy_{val_accuracy}"
                 )
+                self.save_model(best_model_path)
+
         self.save_model(
             self.__config.output_dir / f"finished_model_accuracy_{val_accuracy}"
         )
+        task.upload_artifact("best model", artifact_object=best_model_path)
 
     def save_model(self, output_dir: Path) -> None:
         assert output_dir.exists()

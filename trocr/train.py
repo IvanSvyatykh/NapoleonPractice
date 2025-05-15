@@ -26,7 +26,7 @@ def train_trocr(trocr_config: TransfomerOcrTrainConfig, task: Task,model_dir:str
         / trocr_config.val_metadata_file_name,
         processor=model.processor,
     )
-    model.train(train_dataset, val_dataset, task.get_logger())
+    model.train(train_dataset, val_dataset, task)
 
 
 def download_dataset_task(trocr_config: TransfomerOcrTrainConfig) -> None:
@@ -76,7 +76,6 @@ def main(trocr_config: TransfomerOcrTrainConfig) -> None:
             "pip install boto3",
         ],
     )
-
     train_task.execute_remotely(queue_name=trocr_config.queue_name)
     model_dir,processor_dir =download_model_task(trocr_config)
     download_dataset_task(trocr_config)
