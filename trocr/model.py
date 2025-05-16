@@ -116,20 +116,19 @@ class TrOCRModel:
                 images = images.to(self.__config.device)
                 labels = labels.to(self.__config.device)
                 outputs = self.__model.generate(images)
-                outputs = self.__model(images, labels=labels)
+                predictions = self.__processor.batch_decode(outputs, skip_special_tokens=True)
                 loss = outputs.loss
                 val_loss += loss.item()
                 elements += len(images)
-                count += self.__count_correct_preds(model_output=outputs, labels=labels)
+                count += self.__count_correct_preds(model_output=predictions, labels=labels)
 
         return count / elements, val_loss / len(val_dataloader)
 
     def __count_correct_preds(
-        self,model_output: torch.Tensor, labels: torch.Tensor
+        self,model_output: list[str], labels: torch.Tensor
     ) -> float:
         # add pad_token to
         labels[labels == -100] = self.__processor.tokenizer.pad_token_id
-        model_output[model_output == -100] = self.__processor.tokenizer.pad_token_id
         # Decode to str
         predictions = np.array(
             self.__processor.batch_decode(model_output, skip_special_tokens=True)
