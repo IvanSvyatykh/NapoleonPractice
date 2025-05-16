@@ -120,7 +120,7 @@ class TrOCRModel:
                 loss = outputs.loss
                 val_loss += loss.item()
                 elements += len(images)
-                count += self.__count_correct_preds(model_output=outputs, label_ids=labels)
+                count += self.__count_correct_preds(model_output=outputs, labels=labels)
 
         return count / elements, val_loss / len(val_dataloader)
 
