@@ -15,7 +15,7 @@ def validation(model: Model, criterion, evaluation_loader, converter, opt, devic
 
     for i, (image_tensors, labels) in enumerate(evaluation_loader):
         batch_size = image_tensors.size(0)
-        length_of_data = length_of_data + batch_size
+        length_of_data += batch_size
         image = image_tensors.to(device)
         # For max length prediction
         length_for_pred = torch.IntTensor([opt.batch_max_length] * batch_size).to(

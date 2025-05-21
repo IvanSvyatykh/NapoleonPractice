@@ -44,18 +44,19 @@ def __adjust_contrast_grey(img: np.ndarray, target: float = 0.4) -> np.ndarray:
 
 def prepare_photo(img: ImageFile,imgH:int=32, imgW:int=100, contrast_adjust: float = 0.0) -> torch.Tensor:
     w, h = img.size
+    resized_max_w = imgW
     input_channel = 3 if img.mode == "RGB" else 1
     if input_channel == 3 :
         img = img.convert("L")
         input_channel =1
-    transform = NormalizePAD((input_channel,imgH, imgW))
+    transform = NormalizePAD((input_channel,imgH, resized_max_w))
     if contrast_adjust > 0:
         img = np.array(img.convert("L"))
         img = __adjust_contrast_grey(img, target=contrast_adjust)
         img = Image.fromarray(img, "L")
 
     ratio = w / float(h)
-    if math.ceil(imgH * ratio) > w:
+    if math.ceil(imgH * ratio) > imgW:
         resized_w = imgW
     else:
         resized_w = math.ceil(imgH * ratio)

@@ -74,16 +74,17 @@ def test(config: AttrDict, task: Task) -> None:
     df = create_df_from_txt(path_to_data_dir, metadata_file_name)
     result = df.copy(deep=True)
     all_preds = []
-    for _, row in tqdm(df.iterrows(),"Test model",total=len(df)):
-        path_to_file = path_to_data_dir / config["select_data"] / row["filename"]
-        img = Image.open(path_to_file)
-        tensor = prepare_photo(img,config["imgH"],config["imgW"]).unsqueeze(0).to(device)
-        preds = model(tensor, None)
-        preds_size = torch.IntTensor([preds.size(1)] * 1)
-        _, preds_index = preds.max(2)
-        preds_index = preds_index.view(-1)
-        preds_str = converter.decode_greedy(preds_index.data, preds_size.data)
-        all_preds.append(preds_str[0])
+    with torch.no_grad():
+        for _, row in tqdm(df.iterrows(),"Test model",total=len(df)):
+            path_to_file = path_to_data_dir / config["select_data"] / row["filename"]
+            img = Image.open(path_to_file)
+            tensor = prepare_photo(img,config["imgH"],config["imgW"]).unsqueeze(0).to(device)
+            preds = model(tensor, None)
+            preds_size = torch.IntTensor([preds.size(1)] * 1)
+            _, preds_index = preds.max(2)
+            preds_index = preds_index.view(-1)
+            preds_str = converter.decode_greedy(preds_index.data, preds_size.data)
+            all_preds.append(preds_str[0])
     result["preds"] = all_preds
     
     path_for_csv = Path(config["result_dir"])/(f"{config['task_name']}.csv") 
