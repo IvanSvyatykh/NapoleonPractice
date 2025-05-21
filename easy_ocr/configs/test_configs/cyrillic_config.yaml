@@ -1,6 +1,26 @@
-path_to_model_dir : "./trained_model/model"
-dataset_dir: "../data/dataset_val_100smpl"
-metadata_filename: "annotations.txt"
-results_dir: "../results/EasyOCR-1.7.2"
-device: "cuda"  
-        
+number: '0123456789'
+symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]№_`{|}~ €₽"
+lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяЂђЃѓЄєІіЇїЈјЉљЊњЋћЌќЎўЏџҐґҒғҚқҮүҲҳҶҷӀӏӢӣӨөӮӯ'
+valid_data: '../data/val'
+task_name : 'test_cyrillic_g2_8000_Adadelta_with_GradScaler'
+train_metadata_file_name : "annotations_train_limited_50.txt"
+val_metadata_file_name : "annotations_val.txt"
+manualSeed: 1111
+saved_model: './saved_models/cyrillic_g2_8000_Adadelta_with_GradScaler/best_accuracy.pth'
+FT: True
+grad_clip: 5
+select_data: 'images'
+imgH: 64
+imgW: 600
+PAD: True
+rgb: False
+Transformation: 'None'
+FeatureExtraction: 'VGG'
+SequenceModeling: 'BiLSTM'
+Prediction: 'CTC'
+num_fiducial: 20
+input_channel: 1
+output_channel: 256
+hidden_size: 256
+decode: 'greedy'
+result_dir : './test/results'

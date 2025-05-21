@@ -15,15 +15,16 @@ from typing import List, Tuple
 
 class TrOCRModel:
     def __init__(
-        self, trocr_config: TransfomerOcrTrainConfig, model_dir: str, processor_dir: str
+        self, trocr_config: TransfomerOcrTrainConfig, model_dir: str, processor_dir: str = None
     ):
         self.__config = trocr_config
         self.__model = VisionEncoderDecoderModel.from_pretrained(model_dir).to(
             self.__config.device
         )
-        self.__processor = TrOCRProcessor.from_pretrained(processor_dir)
+        self.__processor = TrOCRProcessor.from_pretrained(processor_dir) if processor_dir is not None else TrOCRProcessor.from_pretrained("microsoft/trocr-base-printed")
 
     def inference(self, path_to_photo: Path) -> Tuple[str, float]:
+        self.__model.eval()
         start_time = time.time()
         image = Image.open(path_to_photo).convert("RGB")
         pixel_values = self.__processor(images=image, return_tensors="pt").pixel_values

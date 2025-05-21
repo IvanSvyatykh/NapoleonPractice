@@ -1,0 +1,23 @@
+# Datasets
+train_dataset_id : "be957f87b2e94224b2559244d91cbbb7"
+val_dataset_id : "c624941404fc4c8283e507ec86134e8e"
+# Model 
+task_id : "03c867f252a44a8e8dffd79ac9e57400"
+model_artifact : "best model"
+processor_artifact : "None"
+# Artifacts name
+agent_model_dir : "./model"
+agent_processor_dir: "./processor"
+agent_train_dataset : "./dataset/train"
+agent_val_dataset : "./dataset/val"
+#Other info
+train_metadata_file_name : "annotations_train_limited_50.txt"
+val_metadata_file_name : "annotations_val.txt"
+output_dir: "./results/microsofttrocr-large-printed"
+device: "cuda"
+optimizer: "None"
+optimizer_step : 0
+epoch : 0
+batch_size : 0
+task_name : "test_trocr_base_printed"
+queue_name : "pavlov_0"
