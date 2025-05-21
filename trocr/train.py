@@ -24,7 +24,7 @@ def train_trocr(trocr_config: TransfomerOcrTrainConfig, task: Task,model_dir:str
         dataset_root_dir=trocr_config.agent_val_dataset,
         path_for_metadata_file=trocr_config.agent_val_dataset
         / trocr_config.val_metadata_file_name,
-        processor=model.processor,
+        processor=model.processor
     )
     model.train(train_dataset, val_dataset, task)
 

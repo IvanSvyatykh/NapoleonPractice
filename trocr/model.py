@@ -10,7 +10,7 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torch.optim import AdamW, Optimizer, Adadelta
 from clearml import Task
-from typing import Tuple
+from typing import List, Tuple
 
 
 class TrOCRModel:
@@ -41,9 +41,16 @@ class TrOCRModel:
             raise ValueError(f"Supports only this optimizers : {optimizers.values()}")
         torch.cuda.empty_cache()
         train_dataloader = DataLoader(
-            train_dataset, batch_size=self.__config.batch_size, shuffle=True
+            train_dataset,
+            batch_size=self.__config.batch_size,
+            shuffle=True,
+            pin_memory=True,
         )
-        val_dataloader = DataLoader(val_dataset, batch_size=self.__config.batch_size)
+        val_dataloader = DataLoader(
+            val_dataset,
+            batch_size=self.__config.batch_size,
+            pin_memory=True,
+        )
         optimizer = optimizers[self.__config.optimizer](
             self.__model.parameters(), lr=self.__config.optimizer_step
         )
@@ -67,7 +74,7 @@ class TrOCRModel:
             )
             print(f"Val loss after epoch {epoch}:", val_loss)
             print(f"Validation Accuracy after epoch {epoch}:", val_accuracy)
-            if prev_val_accuracy > val_accuracy:
+            if prev_val_accuracy < val_accuracy:
                 prev_val_accuracy = val_accuracy
                 best_model_path = (
                     self.__config.output_dir / f"val_accuracy_{val_accuracy}"
@@ -78,12 +85,15 @@ class TrOCRModel:
         self.save_model(
             self.__config.output_dir / f"finished_model_accuracy_{val_accuracy}"
         )
-        task.upload_artifact("best model", artifact_object=best_model_path)
+        task.upload_artifact("result model", artifact_object=best_model_path)
 
     def save_model(self, output_dir: Path) -> None:
-        assert output_dir.exists()
+
+        output_dir.mkdir(exist_ok=True, parents=True)
         processor_dir = output_dir / "processor"
+        processor_dir.mkdir(exist_ok=True)
         model_dir = output_dir / "model"
+        model_dir.mkdir(exist_ok=True)
 
         self.__processor.save_pretrained(processor_dir)
         self.__model.save_pretrained(model_dir)
@@ -115,25 +125,29 @@ class TrOCRModel:
             for images, labels in tqdm(val_dataloader):
                 images = images.to(self.__config.device)
                 labels = labels.to(self.__config.device)
-                outputs = self.__model.generate(images)
-                predictions = self.__processor.batch_decode(outputs, skip_special_tokens=True)
+                predictions = self.__model.generate(images)
+                predictions = self.__processor.batch_decode(
+                    predictions, skip_special_tokens=True
+                )
+                outputs = self.__model(images, labels=labels)
                 loss = outputs.loss
                 val_loss += loss.item()
                 elements += len(images)
-                count += self.__count_correct_preds(model_output=predictions, labels=labels)
+                count += self.__count_correct_preds(
+                    model_output=predictions, labels=labels
+                )
 
         return count / elements, val_loss / len(val_dataloader)
 
     def __count_correct_preds(
-        self,model_output: list[str], labels: torch.Tensor
+        self, model_output: List[str], labels: torch.Tensor
     ) -> float:
         # add pad_token to
         labels[labels == -100] = self.__processor.tokenizer.pad_token_id
-        # Decode to str
-        predictions = np.array(
-            self.__processor.batch_decode(model_output, skip_special_tokens=True)
+        predictions = np.array(model_output)
+        label_str = np.array(
+            self.__processor.batch_decode(labels, skip_special_tokens=True)
         )
-        label_str = np.array(self.__processor.batch_decode(labels, skip_special_tokens=True))
         assert len(predictions) == len(label_str)
         return np.sum(predictions == label_str)
 
